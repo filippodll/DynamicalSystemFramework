@@ -10,16 +10,17 @@
 
 #include <functional>
 #include <queue>
+#include <tuple>
 #include <utility>
 
 namespace dsm {
   /// @brief The Node class represents a node in the network.
   /// @tparam Id The type of the node's id. It must be an unsigned integral type.
-  template <typename Id>
-    requires std::unsigned_integral<Id>
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
   class Node {
   private:
-    std::queue<Id> m_queue;
+    std::tuple<std::queue<Ids>...> m_queue;
     std::pair<double, double> m_coords;
     Id m_id;
 
@@ -36,14 +37,14 @@ namespace dsm {
     /// @param id, The node's id
     /// @param coords, A std::pair containing the node's coordinates
     /// @param queue, A std::queue containing the node's queue
-    Node(Id id, std::pair<double, double> coords, std::queue<Id> queue);
+    Node(Id id, std::pair<double, double> coords, std::queue<Ids>&&... queue);
 
     /// @brief Set the node's coordinates
     /// @param coords, A std::pair containing the node's coordinates
     void setCoords(std::pair<double, double> coords);
     /// @brief Set the node's queue
     /// @param queue, A std::queue containing the node's queue
-    void setQueue(std::queue<Id> queue);
+    void setQueue(std::queue<Ids>&&... queue);
 
     /// @brief Get the node's id
     /// @return Id, The node's id
@@ -53,67 +54,67 @@ namespace dsm {
     const std::pair<double, double>& coords() const;
     /// @brief Get the node's queue
     /// @return std::queue<Id>, A std::queue containing the node's queue
-    const std::queue<Id>& queue() const;
+    const std::tuple<std::queue<Ids>...>& queue() const;
   };
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  Node<Id>::Node(Id id) : m_id{id} {}
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  Node<Id, Ids...>::Node(Id id) : m_id{id} {}
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  Node<Id>::Node(Id id, std::pair<double, double> coords) : m_coords{std::move(coords)}, m_id{id} {}
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  Node<Id, Ids...>::Node(Id id, std::pair<double, double> coords) : m_coords{std::move(coords)}, m_id{id} {}
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  Node<Id>::Node(Id id, std::pair<double, double> coords, std::queue<Id> queue)
-      : m_queue{std::move(queue)}, m_coords{std::move(coords)}, m_id{id} {}
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  Node<Id, Ids...>::Node(Id id, std::pair<double, double> coords, std::queue<Ids>&&... queues)
+      : m_queue{std::make_tuple(queues...)}, m_coords{std::move(coords)}, m_id{id} {}
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  Id Node<Id>::id() const {
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  Id Node<Id, Ids...>::id() const {
     return m_id;
   }
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  void Node<Id>::setCoords(std::pair<double, double> coords) {
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  void Node<Id, Ids...>::setCoords(std::pair<double, double> coords) {
     m_coords = std::move(coords);
   }
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  void Node<Id>::setQueue(std::queue<Id> queue) {
-    m_queue = std::move(queue);
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  void Node<Id, Ids...>::setQueue(std::queue<Ids>&&... queues) {
+    m_queue = std::make_tuple(queues...);
   }
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  const std::pair<double, double>& Node<Id>::coords() const {
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  const std::pair<double, double>& Node<Id, Ids...>::coords() const {
     return m_coords;
   }
 
-  template <typename Id>
-    requires std::unsigned_integral<Id>
-  const std::queue<Id>& Node<Id>::queue() const {
+  template <typename Id, typename... Ids>
+    requires std::unsigned_integral<Id> && (std::unsigned_integral<Ids> && ...)
+  const std::tuple<std::queue<Ids>...>& Node<Id, Ids...>::queue() const {
     return m_queue;
   }
 
   // to be implemented
   /* template <typename Id> */
-  /* class Intersection : public Node<Id> { */
+  /* class Intersection : public Node<Id, Ids...> { */
   /* private: */
   /*   std::function<void()> m_priority; */
   /* }; */
 
   /* template <typename Id> */
-  /* class Roundabout : public Node<Id> { */
+  /* class Roundabout : public Node<Id, Ids...> { */
   /* private: */
   /*   std::function<void()> m_priority; */
   /* }; */
 
   /* template <typename Id> */
-  /* class TrafficLight : public Node<Id> { */
+  /* class TrafficLight : public Node<Id, Ids...> { */
   /* private: */
   /*   std::function<void()> m_priority; */
   /* }; */
