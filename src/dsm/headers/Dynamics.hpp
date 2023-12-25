@@ -62,7 +62,7 @@ namespace dsm {
     Dynamics() = delete;
     /// @brief Construct a new Dynamics object
     /// @param graph The graph representing the network
-    Dynamics(const Graph<Id, Size>& graph);
+    explicit Dynamics(const Graph<Id, Size>& graph);
 
     /// @brief Set the itineraries
     /// @param itineraries The itineraries
@@ -267,7 +267,7 @@ namespace dsm {
       throw std::invalid_argument(errorMsg);
     }
     auto& agent{*agentIt};
-    auto& street{this->m_graph->street(agent->position())};
+    const auto& street{this->m_graph->street(agent->position())};
     double speed{f(args...)};
     agentIt->setSpeed(speed);
   }
@@ -634,7 +634,7 @@ namespace dsm {
     FirstOrderDynamics() = delete;
     /// @brief Construct a new First Order Dynamics object
     /// @param graph, The graph representing the network
-    FirstOrderDynamics(const Graph<Id, Size>& graph);
+    explicit FirstOrderDynamics(const Graph<Id, Size>& graph);
     /// @brief Set the speed of an agent
     /// @param agentId, The index of the agent
     /// @throw std::invalid_argument, If the agent is not found

@@ -65,10 +65,10 @@ namespace dsm {
     Graph();
     /// @brief Construct a new Graph object
     /// @param adj, An adjacency matrix made by a SparseMatrix representing the graph's adjacency matrix
-    Graph(const SparseMatrix<Id, bool>& adj);
+    explicit Graph(const SparseMatrix<Id, bool>& adj);
     /// @brief Construct a new Graph object
     /// @param streetSet, A map of streets representing the graph's streets
-    Graph(const std::unordered_map<Id, shared<Street<Id, Size>>>& streetSet);
+    explicit Graph(const std::unordered_map<Id, shared<Street<Id, Size>>>& streetSet);
 
     /// @brief Build the graph's adjacency matrix
     void buildAdj();
