@@ -18,6 +18,8 @@
 #include <unordered_map>
 #include <cmath>
 
+#include <tbb/tbb.h>
+
 #include "Agent.hpp"
 #include "Itinerary.hpp"
 #include "Graph.hpp"
@@ -432,13 +434,13 @@ namespace dsm {
     for (const auto& [itineraryId, itinerary] : m_itineraries) {
       SparseMatrix<Id, bool> path{dimension, dimension};
       // cycle over the nodes
-      for (Size i{0}; i < dimension; ++i) {
+      tbb::parallel_for(Size{0}, dimension, [&](Size i) -> void {
         if (i == itinerary->destination()) {
-          continue;
+          return;
         }
         auto result{m_graph->shortestPath(i, itinerary->destination())};
         if (!result.has_value()) {
-          continue;
+          return;
         }
         // save the minimum distance between i and the destination
         auto minDistance{result.value().distance()};
@@ -468,7 +470,7 @@ namespace dsm {
           }
         }
         itinerary->setPath(path);
-      }
+      });
     }
   }
 

@@ -27,7 +27,10 @@ endif()
 # add as executable all cpp files into '.' folder
 file(GLOB SOURCES "*.cpp")
 
+find_package(TBB REQUIRED)
+
 # Define the executable
 add_executable(dsm_tests.out ${SOURCES})
 target_include_directories(dsm_tests.out PRIVATE ../src/dsm/headers/ ../src/dsm/utility/TypeTraits/)
 target_include_directories(dsm_tests.out SYSTEM PRIVATE ${doctest_SOURCE_DIR}/doctest)
+target_link_libraries(dsm_tests.out PRIVATE TBB::tbb)
