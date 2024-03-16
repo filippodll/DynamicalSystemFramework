@@ -20,22 +20,22 @@ int main() {
     street->setMaxSpeed(13.9);
   }
 
-  Itinerary it1{0, 10, 118};
-  Itinerary it2{1, 7, 118};
-  Itinerary it3{2, 4, 118};
-  Itinerary it4{3, 1, 118};
-  Itinerary it5{4, 10, 115};
-  Itinerary it6{5, 7, 115};
-  Itinerary it7{6, 4, 115};
-  Itinerary it8{7, 1, 115};
-  Itinerary it9{8, 10, 112};
-  Itinerary it10{9, 7, 112};
-  Itinerary it11{10, 4, 112};
-  Itinerary it12{11, 1, 112};
-  Itinerary it13{12, 10, 109};
-  Itinerary it14{13, 7, 109};
-  Itinerary it15{14, 4, 109};
-  Itinerary it16{15, 1, 109};
+  Itinerary it1{0, 10};
+  Itinerary it2{1, 7};
+  Itinerary it3{2, 4};
+  Itinerary it4{3, 1};
+  Itinerary it5{4, 10};
+  Itinerary it6{5, 7};
+  Itinerary it7{6, 4};
+  Itinerary it8{7, 1};
+  Itinerary it9{8, 10};
+  Itinerary it10{9, 7};
+  Itinerary it11{10, 4};
+  Itinerary it12{11, 1};
+  Itinerary it13{12, 10};
+  Itinerary it14{13, 7};
+  Itinerary it15{14, 4};
+  Itinerary it16{15, 1};
 
   Dynamics dynamics{graph};
   dynamics.addItinerary(it1);
