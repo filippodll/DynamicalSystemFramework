@@ -13,11 +13,10 @@ using Bench = sb::Bench<long long int>;
 
 int main() {
 
-    Graph graph{};
+  Graph graph{};
   graph.importMatrix("../test/data/matrix.dat", false);
-  for (auto &streetPair : graph.streetSet()) {
-    auto street = streetPair.second;
-    street->setMaxSpeed(13.9);
+  for (const auto &streetPair : graph.streetSet()) {
+    streetPair.second->setMaxSpeed(13.9);
   }
 
   Itinerary it1{0, 10};
