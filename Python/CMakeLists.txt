@@ -19,4 +19,4 @@ include_directories(../src/dsm/)
 # set(EXECUTABLE_OUTPUT_PATH ../)
 
 # Define the executable
-pybind11_add_module(Node binding.cpp)
+pybind11_add_module(dsm binding.cpp)
