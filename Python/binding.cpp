@@ -2,6 +2,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "headers/Agent.hpp"
+#include "headers/Itinerary.hpp"
 #include "headers/Node.hpp"
 #include "headers/Street.hpp"
 
@@ -11,6 +13,10 @@ using Id = uint32_t;
 using Size = uint32_t;
 using Node = dsm::Node<Id, Size>;
 using Street = dsm::Street<Id, Size>;
+using SparseMatrix = dsm::SparseMatrix<Id, bool>;
+using Itinerary = dsm::Itinerary<Id>;
+using Agent_i = dsm::Agent<Id, Size, int>;
+using Agent_d = dsm::Agent<Id, Size, double>;
 
 PYBIND11_MODULE(dsm, m) {
   py::class_<Node>(m, "Node")
@@ -62,4 +68,59 @@ PYBIND11_MODULE(dsm, m) {
       .def("enqueue", &Street::enqueue)
       .def("dequeue", &Street::dequeue)
       .def("isSpire", &Street::isSpire);
+
+  py::class_<Itinerary>(m, "Itinerary")
+      .def(py::init<Id, Id>())
+      .def(py::init<Id, Id, SparseMatrix>())
+      .def("setDestination", &Itinerary::setDestination)
+      .def("setPath", &Itinerary::setPath)
+      .def("id", &Itinerary::id)
+      .def("destination", &Itinerary::destination)
+      .def("path", &Itinerary::path);
+
+  py::class_<Agent_d>(m, "Agent_d")
+      .def(py::init<Id, Id>())
+      .def(py::init<Id, Id, Id>())
+      .def("setSourceNodeId", &Agent_d::setSourceNodeId)
+      .def("setItineraryId", &Agent_d::setItineraryId)
+      .def("setSpeed", &Agent_d::setSpeed)
+      .def("incrementDelay", py::overload_cast<>(&Agent_d::incrementDelay))
+      .def("incrementDelay", py::overload_cast<double>(&Agent_d::incrementDelay))
+      .def("decrementDelay", &Agent_d::decrementDelay)
+      .def("incrementDistance", py::overload_cast<>(&Agent_d::incrementDistance))
+      .def("incrementDistance", py::overload_cast<double>(&Agent_d::incrementDistance))
+      .def("incrementTime", py::overload_cast<>(&Agent_d::incrementTime))
+      .def("incrementTime", py::overload_cast<unsigned int>(&Agent_d::incrementTime))
+      /* .def("resetTime", &Agent_d::resetTime) */
+      .def("id", &Agent_d::id)
+      .def("itineraryId", &Agent_d::itineraryId)
+      .def("streetId", &Agent_d::streetId)
+      .def("srcNodeId", &Agent_d::srcNodeId)
+      .def("speed", &Agent_d::speed)
+      .def("delay", &Agent_d::delay)
+      .def("distance", &Agent_d::distance)
+      .def("time", &Agent_d::time);
+
+  py::class_<Agent_i>(m, "Agent_i")
+      .def(py::init<Id, Id>())
+      .def(py::init<Id, Id, Id>())
+      .def("setSourceNodeId", &Agent_i::setSourceNodeId)
+      .def("setItineraryId", &Agent_i::setItineraryId)
+      .def("setSpeed", &Agent_i::setSpeed)
+      .def("incrementDelay", py::overload_cast<>(&Agent_i::incrementDelay))
+      .def("incrementDelay", py::overload_cast<int>(&Agent_i::incrementDelay))
+      .def("decrementDelay", &Agent_i::decrementDelay)
+      .def("incrementDistance", py::overload_cast<>(&Agent_i::incrementDistance))
+      .def("incrementDistance", py::overload_cast<double>(&Agent_i::incrementDistance))
+      .def("incrementTime", py::overload_cast<>(&Agent_i::incrementTime))
+      .def("incrementTime", py::overload_cast<unsigned int>(&Agent_i::incrementTime))
+      /* .def("resetTime", &Agent_i::resetTime) */
+      .def("id", &Agent_i::id)
+      .def("itineraryId", &Agent_i::itineraryId)
+      .def("streetId", &Agent_i::streetId)
+      .def("srcNodeId", &Agent_i::srcNodeId)
+      .def("speed", &Agent_i::speed)
+      .def("delay", &Agent_i::delay)
+      .def("distance", &Agent_i::distance)
+      .def("time", &Agent_i::time);
 }
