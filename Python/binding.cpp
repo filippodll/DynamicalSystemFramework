@@ -4,6 +4,7 @@
 
 #include "headers/Agent.hpp"
 #include "headers/Itinerary.hpp"
+#include "headers/Graph.hpp"
 #include "headers/Node.hpp"
 #include "headers/Street.hpp"
 
@@ -17,6 +18,10 @@ using SparseMatrix = dsm::SparseMatrix<Id, bool>;
 using Itinerary = dsm::Itinerary<Id>;
 using Agent_i = dsm::Agent<Id, Size, int>;
 using Agent_d = dsm::Agent<Id, Size, double>;
+using Graph = dsm::Graph<Id, Size>;
+
+using NodeMap = std::unordered_map<Id, std::unique_ptr<Node>>;
+using StreetMap = std::unordered_map<Id, std::unique_ptr<Street>>;
 
 PYBIND11_MODULE(dsm, m) {
   py::class_<Node>(m, "Node")
@@ -123,4 +128,30 @@ PYBIND11_MODULE(dsm, m) {
       .def("delay", &Agent_i::delay)
       .def("distance", &Agent_i::distance)
       .def("time", &Agent_i::time);
+
+  py::class_<Graph>(m, "Graph")
+	.def(py::init<>())
+	.def(py::init<const SparseMatrix&>())
+	.def(py::init<const StreetMap&>())
+	.def(py::init<const Graph&>())
+	.def(py::init<Graph&&>())
+	.def("buildAdj", &Graph::buildAdj)
+	.def("buildStreetAngles", &Graph::buildStreetAngles)
+	.def("importMatrix", &Graph::importMatrix)
+	.def("importCoordinates", &Graph::importCoordinates)
+	.def("importOSMNodes", &Graph::importOSMNodes)
+	.def("importOSMEdges", &Graph::importOSMEdges)
+	.def("exportMatrix", &Graph::exportMatrix)
+	/* .def("addNode", py::overload_cast<std::unique_ptr<Node>>(&Graph::addNode) */
+	/* .def("addNode", py::overload_cast<const Node&>(&Graph::addNode) */
+	/* .def("addStreet", py::overload_cast<std::unique_ptr<Street>>(&Graph::addStreet) */
+	/* .def("addStreet", py::overload_cast<const Street&>(&Graph::addStreet) */
+	.def("adjMatrix", &Graph::adjMatrix)
+	.def("nodeSet", py::overload_cast<>(&Graph::nodeSet))
+	.def("nodeSet", py::overload_cast<>(&Graph::nodeSet), py::const_)
+	.def("streetSet", py::overload_cast<>(&Graph::streetSet))
+	.def("streetSet", py::overload_cast<>(&Graph::streetSet), py::const_)
+	.def("street", &Graph::street);
+	/* .def("shortestPath", py::overload_cast<const Node&, const Node&>(&Graph::shortestPath)) */
+	/* .def("shortestPath", py::overload_cast<Id, Id>(&Graph::shortestPath)); */
 }
