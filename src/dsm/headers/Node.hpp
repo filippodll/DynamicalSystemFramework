@@ -35,6 +35,9 @@ namespace dsm {
     Size m_capacity;
 
   public:
+	using Id_t = Id;
+	using Size_t = Size;
+
     Node() = default;
     /// @brief Construct a new Node object with capacity 1
     /// @param id The node's id
