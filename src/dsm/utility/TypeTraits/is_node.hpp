@@ -23,6 +23,11 @@ namespace dsm {
   template <typename Id, typename Size>
   struct is_node<const Node<Id, Size>&> : std::true_type {};
 
+  template <typename T>
+  struct is_node<std::is_base_of_v<Node<T::Id_t, T::Size_t>,
+                                   std::remove_const_t<std::remove_reference_t<T>>>>
+      : std::true_type {};
+
   template <typename Id, typename Size>
   struct is_node<std::unique_ptr<Node<Id, Size>>> : std::true_type {};
 
